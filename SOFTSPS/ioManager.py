@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: ascii -*-
 
-from physicalDPWriter import *
+from physicalDpWriter import *
 
 writer = physicalDpWriter()
 writer.writeAllOutputs()
+

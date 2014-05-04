@@ -24,15 +24,15 @@ relay1 = {'name': 'Relay1'}
 # ==================
 
 startZeit1 = datetime.time(10, 45, 0)
-stopZeit1 = datetime.time(13, 20, 0)
+stopZeit1 = datetime.time(14, 59, 0)
 
 
 jetzt = datetime.datetime.now()
 
 if ((jetzt.time() > startZeit1) and (jetzt.time() < stopZeit1)):
-	IOs.update(relay1, {"$set": {'actualValue':'1'}})
+	IOs.update(relay1, {"$set": {'actualValue':1}})
 else:
-	IOs.update(relay1, {"$set": {'actualValue':'0'}})
+	IOs.update(relay1, {"$set": {'actualValue':0}})
 
 
 #startZeit2 = datetime.time(10,45, 0)

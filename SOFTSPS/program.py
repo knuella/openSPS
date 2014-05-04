@@ -4,6 +4,13 @@ from subprocess import Popen
 
 import subprocess as sp
 import shlex
+import sys
+import logging
+
+
+EXIT_SUCCESS = 0
+
+
 
 @total_ordering
 class Program:
@@ -45,6 +52,15 @@ class Program:
     def run(self):
         self.update_next_runtime()
 
-        print("running process %s" % self.name)
-        # self.process = Popen(self.command, stdin=sp.NULL, stdout=sp.NULL,
-        #                      stderr=sp.NULL)
+        if self.process:
+            if self.process.poll() is None:
+                logging.error("%s runtime exceeds its intervall, killing",
+                              self.name)
+                self.process.kill()
+            elif self.process.returncode != EXIT_SUCCESS:
+                logging.error("%s returned with error code %s",
+                              self.name, self.process.returncode)
+
+        logging.info("running process %s", self.name)
+        self.process = Popen(self.command, stdin=sys.stdin, stdout=sys.stdout,
+                             stderr=sys.stderr)

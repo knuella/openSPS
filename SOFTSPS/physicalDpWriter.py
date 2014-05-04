@@ -11,7 +11,7 @@ testDP3 = {"name": "Relay1",
 					"type": "output",
 					"hardwareType": "gnublinRelayIO",
 					"hardwareData": {"modulAddress": 0x20,
-													 "relayAddress": 3}}
+													 "relayAddress": 1}}
 
 def insertTestDP(dp):
 		

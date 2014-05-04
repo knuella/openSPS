@@ -1,18 +1,15 @@
 #!/usr/bin/python3
-
 from heapq    import heappop, heappush
 from time     import sleep
 from datetime import datetime
 
 import configparser
+import logging
+import sys
 
 from program import Program
+from config  import config
 
-
-
-config = {
-    "config_path": "./config/"
-}
 
 
 def read_config_fill_queue():
@@ -37,11 +34,13 @@ def read_config_fill_queue():
             prog_path = realpath(config[section]["path"])
             del kwargs["path"]
         except KeyError:
+            logging.error("%s is missing the path configuartion key",
+                          config_path)
             continue
-            # TODO: report missing required config option
         if prog_path in path_program_dict:
-            pass
-            # TODO: log error in configuration files
+            logging.warn("%s in %s has already been referenced by %s",
+                         prog_path, config_path,
+                         path_program_dict[prog_path].config_document)
         else:
             prog = Program(prog_path, **kwargs)
             path_program_dict[prog.path] = prog
@@ -50,7 +49,16 @@ def read_config_fill_queue():
     chdir(prev_dir)
 
 
+def init():
+    default_log_format = "%(asctime)s| %(levelname)s: %(message)s"
+    logging.basicConfig(filename = config.get("logfile", None),
+                        level    = config.get("loglevel", logging.WARN),
+                        format   = config.get("logformat",
+                                              default_log_format))
+
+
 def main():
+    init()
     read_config_fill_queue()
     while True:
         prog = heappop(priority_queue)
