@@ -6,7 +6,7 @@ import gnublin
 
 class gnublinRelayIO:
 	"""
-	A class to connect to the hardware of a gnublin_relay_modul as a plugin of
+	A class to connect to the hardware of a gnublin_module_relay as a plugin of
 	the openSPS-project.
 	
 	It should be used to set the outputs (relays) on the modul, the actual value
@@ -15,7 +15,7 @@ class gnublinRelayIO:
 	Attributes:
 		_good (boolean): False, if during the last operation an error accourt. 
 		_actualValue (int): last value, which was read.
-		_modul (gnublin_modul_relay): brings the funktionality the conntct to the
+		_modul (gnublin_module_relay): brings the funktionality the conntct to the
 			hardware (from the gnublin api)
 	"""
 	

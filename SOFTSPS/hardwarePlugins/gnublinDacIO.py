@@ -3,8 +3,8 @@
 
 from openspsExceptions import *
 import gnublin
-from transformations import *
 import sys
+from scalings import *
 
 class gnublinDacIO:
 	"""
@@ -21,7 +21,7 @@ class gnublinDacIO:
 			hardware (from the gnublin api)
 	"""
 	
-	def __init__(self, dacAddress, transformationType, transformationData):
+	def __init__(self, dacAddress, scalingType, scalingData):
 		"""
 		Initialize the object with the actual value reading from the hardware. 
 		Initialize the actual value to 0, if there is an error during reading.
@@ -35,8 +35,8 @@ class gnublinDacIO:
 		
 		self._modul = gnublin.gnublin_module_dac()
 		
-		self._transformator = getattr(sys.modules[__name__],transformationType) \
-													(**transformationData)
+		self._scaler = getattr(sys.modules[__name__],scalingType) \
+													(**scalingData)
 		
 		if dacAddress >= 0 and dacAddress <= 3:
 			self._dacAddress = dacAddress
@@ -49,7 +49,7 @@ class gnublinDacIO:
 	
 	def setValue(self, toSetValue):
 		
-		computalValue = self._transformator.getComputal(toSetValue)
+		computalValue = self._scaler.getY(toSetValue)
 		
 		self._modul.write(self._dacAddress, (int)(computalValue))
 		
@@ -63,7 +63,7 @@ class gnublinDacIO:
 		
 		computalValue = self._modul.read(self._dacAddress)
 		
-		self._actualValue = self._transformator.getHumanReadebal(computalValue)
+		self._actualValue = self._scaler.getX(computalValue)
 		#self._good = True
 		return self._actualValue
 	
