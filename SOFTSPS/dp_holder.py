@@ -13,7 +13,7 @@ class DPHolder:
     
     def get_from_db(self):
         db_client = MongoClient()
-        db_outputs = dbClient.ios.outputs        
+        db_outputs = db_client.ios.outputs        
         output_names = db_outputs.distinct('name')
         
         for output_name in output_names:
@@ -23,7 +23,7 @@ class DPHolder:
         for key in self.outputs:
             self.outputs[key].write_physical_value()
     
-    def updateAllToDB(self):        
+    def update_all_to_db(self):        
         for key in self.outputs:
             self.outputs[key].update_to_db()
 
@@ -61,7 +61,7 @@ def add_my_dps():
                 "hardware_data": 
                     {
                         "dac_address": i,
-                        "scaling_type": "linearScaler",
+                        "scaling_type": "LinearScaler",
                         "scaling_data": 
                             {
                                 "y1":0,

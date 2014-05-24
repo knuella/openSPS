@@ -43,8 +43,8 @@ class OutputDP:
             {'$set': 
                 {
                     'state': self._dp['state'], 
-                    'actualValue': self._dp['actualValue']
-                 }
+                    'actual_value': self._dp['actual_value']
+                }
             })
 
 
