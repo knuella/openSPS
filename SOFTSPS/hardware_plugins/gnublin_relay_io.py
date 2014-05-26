@@ -15,7 +15,7 @@ class GnublinRelayIO:
     Attributes:
         _good (boolean): False, if during the last operation an error accourt. 
         _actual_value (int): last value, which was read.
-        _modul (gnublin_module_relay): brings the funktionality the conntct to the
+        _modul (gnublin_module_relay): contains the funktionality to conntect to the
             hardware (from the gnublin api)
     """
     
@@ -41,12 +41,20 @@ class GnublinRelayIO:
         self.get_value()
     
     def set_value(self, to_set_value):
+        """ Write a new value to the hardware.
+        Sets the "_good"-flag.
+        Args:
+            to_set_value (real): Value that will be write.
+        """
         if self._modul.switchPin(self._relay_address, to_set_value) != -1:
             self._good = True
         else:
             self._good = False
 
     def get_value(self):
+        """ Read the value from the hardware.
+        Sets the "_good"-flag.
+        """
         value = self._modul.readState(self._relay_address)
         if value != -1:
             self._actual_value = value
@@ -56,6 +64,10 @@ class GnublinRelayIO:
             self._good = False
     
     def get_good(self):
+        """ Returns false, if the last operation don't reach its goal.
+        Otherwise returns true.
+        """
+        return self._good
         return self._good
 
 

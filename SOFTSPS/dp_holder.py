@@ -6,29 +6,52 @@ from output import *
 
 
 class DPHolder:
-    
+    """ Creates lists of instaces from OutputDP-Class or InputDP-Class.
+    The class depends on the collecion in that the datapoints are. 
+    Contains methodes to do manipulations on all the datapoints in the list,
+    whith assume that the instances have the same methodes.
+
+    Attributes:
+        _outputs (dict): dict of datapoint names (kay) and instances of the
+            datapoint (value).
+    """
+
     def __init__(self):    
-        self.outputs = {}
+        """ Inizialize the lists by calling the method "get_from_db" """
+        self._outputs = {}
         self.get_from_db()
     
     def get_from_db(self):
+        """ Reads the names of the datapoints in the collections and creates one
+        list for every collection. 
+        Actually only the list "_outputs".
+        """
         db_client = MongoClient()
         db_outputs = db_client.ios.outputs        
         output_names = db_outputs.distinct('name')
         
         for output_name in output_names:
-            self.outputs[output_name] = OutputDP(output_name) 
+            self._outputs[output_name] = OutputDP(output_name) 
     
     def write_all_physical_values(self):
-        for key in self.outputs:
-            self.outputs[key].write_physical_value()
+        """ Write all the values of the datapoints in the list "_outputs",
+        witch have changed, to the hardware.
+        """
+        for key in self._outputs:
+            self._outputs[key].write_physical_value()
     
     def update_all_to_db(self):        
-        for key in self.outputs:
-            self.outputs[key].update_to_db()
+        """ Write all the values and the state of the datapoints in the list "_outputs",
+        witch have changed, to the database.
+        """
+        for key in self._outputs:
+            self._outputs[key].update_to_db()
 
 
 def add_my_dps():
+    """ Testfunction.
+    Add some datapoints to the database. 
+    """
     client = MongoClient()
     outputs = client.ios.outputs
 
