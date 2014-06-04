@@ -59,10 +59,15 @@ def add_my_dps():
         for i in range(1, 5):
             outputs.save(
                 {
-                    "name": "Relay" + (str)(i + 4*k),
-                    "actual_value": 0,
-                    "state": "don't know!",
+                    "name": "Relay" + (str)(i + 4*k) + "_Ein",
+                    "description": "a Relay...",
                     "type": "binary output",
+                    "state": "don't know!",
+                    "actual_value": 0,
+                    "active_text": "Ein",
+                    "inactive_text": "Aus",
+                    "manual_override": "no",
+                    "manual_value": 0,
                     "hardware_type": "GnublinRelayIO",
                     "hardware_data": 
                         {
@@ -76,10 +81,13 @@ def add_my_dps():
         outputs.save(
             {
                 "name": "Dac" + (str)(i + 1),
+                "description": "a Relay...",
+                "type": "analog output",
+                "state": "don't know!",
                 "actual_value": 0,
                 "unit": "V",
-                "state": "don't know!",
-                "type": "analog output",
+                "manual_override": "no", # no | yes
+                "manual_value": 0,
                 "hardware_type": "GnublinDacIO",
                 "hardware_data": 
                     {
@@ -92,6 +100,46 @@ def add_my_dps():
                                 "x1":0,
                                 "x2":10
                             }
+                    }
+            }
+        )
+    
+    for k in range(0, 2):
+        for i in range(1, 5):
+            inputs.save(
+                {
+                    "name": "Relay" + (str)(i + 4*k) + "_RM",
+                    "description": "Rückmeldung vom Relay.",
+                    "type": "binary input",
+                    "state": "don't know!",
+                    "actual_value": 0,
+                    "active_text": "Ein",
+                    "inactive_text": "Aus",
+                    "simulation_override": "yes",
+                    "simulation_type": "Simulation1", # programmname | manual 
+                    "simulation_value": 0,
+                    "hardware_type": "none",
+                    "hardware_data": 
+                        {
+                        }
+                }
+            )
+    
+    for i in range(0, 4):
+        inputs.save(
+            {
+                "name": "Dac" + (str)(i + 1) + "_RM",
+                "description": "Rückmessung vom Dac, also ein ADC ;).",
+                "type": "analog input",
+                "state": "don't know!",
+                "actual_value": 0,
+                "unit": "V",
+                "simulation_override": "yes",
+                "simulation_type": "Simulation1", # programmname | manual 
+                "simulation_value": 0,
+                "hardware_type": "none",
+                "hardware_data": 
+                    {
                     }
             }
         )

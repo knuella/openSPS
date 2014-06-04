@@ -5,6 +5,99 @@ import pymongo
 from pymongo import MongoClient
 from hardware_plugins import *
 
+def new_analog_output:
+    """ This is the template to create a new analog output with the class
+    OutputDP.
+    """
+    {
+        "name": 
+            {
+                "shortdsc": "The name from the datapoint.",
+                "longdsc": "A unique string, which is used to address this
+                            instance.",
+                "type": "simple",
+                "format": "unique string",
+            },
+        "description":
+            {
+                "shortdsc": "A short description.",
+                "longdsc": "Maybe the place or the electrical connection point",
+                "default": "",
+                "type": "simple",
+                "format": "string",
+                "exclusive": "gui",
+            },
+        "state":
+            {
+                "shortdsc": "The errorstate from the datapoint.",
+                "longdsc": "Shoud show, if the datapoint is ready and otherwise
+                            why not.",
+                "default": "don't know",
+                "type": "output",
+                "format": "string of (don't know|normal|Hardwareerror)",
+            },
+        "actual_value": 
+            {
+                "shortdsc": "The value, which was write to the hardware at last.",
+                "longdsc": "Will write to the hardware, when changed.
+                            Will be overridden with manual_value, when
+                            manual_override is true.",
+                "default": 0.0,
+                "type": "input",
+                "format": "float",
+                "exclusive": "True",
+            },
+        "unit":
+            {
+                "shortdsc": "The unit from the actual_value.",
+                "longdsc": "For example °C, °F, %, -",
+                "type": "simple",
+                "format": "string",
+                "exclusive": "gui",
+            },
+        "manual_override":
+            {
+                "shortdsc": "Boolean, to set the manual_value. ",
+                "longdsc": "If true, the actual_value will be overridden with 
+                            manual_value, else an other program can write the
+                            actual value."
+                "default": False,
+                "type": "input",
+                "format": "boolean",
+                "exclusive": "True",
+            },
+        "manual_value": 
+            {
+                "shortdsc": "To set a manual value to the hardware.",
+                "longdsc": "actual_value will be overridden with this, when
+                            manual_override is true.",
+                "default": 0.0,
+                "type": "input",
+                "format": "float",
+                "exclusive": "True",
+            },
+        "hardware_type":
+            {
+                "shortdsc": "The name from the hardwareplugin.",
+                "longdsc": "The hardwareplugin is used to connect to the
+                            hardware.",
+                "default": "none",
+                "type": "simple",
+                "format": "string",
+                "exclusive": "gui",
+            },
+        "hardware_data": 
+            {
+                "shortdsc": "The params for the hardwareplugin.",
+                "longdsc": "This data is needed by the hardwareplugin. Here
+                            also should set the scaling options.",
+                "default": "",
+                "type": "simple",
+                "format": "dictionary",
+                "exclusive": "gui",
+            },
+    }
+
 
 class OutputDP:
     """ OutputDP means output datapoint.
@@ -75,7 +168,7 @@ class OutputDP:
             self._dp['state'] = 'good'
     
     def update_to_db(self):
-        """ Write the value and state, stord in "_dp" to database.
+        """ Write the value and state, stored in "_dp" to database.
         TODO: Writes only, if the values have bigger differents, than specified
         in "cov" or have changed (strings, boolean).
         """
