@@ -9,97 +9,46 @@ def new_analog_output:
     """ This is the template to create a new analog output with the class
     OutputDP.
     """
-    params = 
-        {
-            "name": 
-                {
-                    "shortdsc": "The name from the datapoint.",
-                    "longdsc": "A unique string, which is used to address this
-                                instance.",
-                    "type": "simple",
-                    "format": "unique string",
-                },
-            "description":
-                {
-                    "shortdsc": "A short description.",
-                    "longdsc": "Maybe the place or the electrical connection
-                                point",
-                    "default": "",
-                    "type": "simple",
-                    "format": "string",
-                    "exclusive": "gui",
-                },
-            "state":
-                {
-                    "shortdsc": "The errorstate from the datapoint.",
-                    "longdsc": "Shoud show, if the datapoint is ready and otherwise
-                                why not.",
-                    "default": "don't know",
-                    "type": "output",
-                    "format": "string of (don't know|normal|Hardwareerror)",
-                },
-            "actual_value": 
-                {
-                    "shortdsc": "The value, which was write to the hardware at
-                                  last.",
-                    "longdsc": "Will write to the hardware, when changed.
-                                Will be overridden with manual_value, when
-                                manual_override is true.",
-                    "default": 0.0,
-                    "type": "input",
-                    "format": "float",
-                    "exclusive": "True",
-                },
-            "unit":
-                {
-                    "shortdsc": "The unit from the actual_value.",
-                    "longdsc": "For example °C, °F, %, -",
-                    "type": "simple",
-                    "format": "string",
-                    "exclusive": "gui",
-                },
-            "manual_override":
-                {
-                    "shortdsc": "Boolean, to set the manual_value. ",
-                    "longdsc": "If true, the actual_value will be overridden with 
-                                manual_value, else an other program can write the
-                                actual value."
-                    "default": False,
-                    "type": "input",
-                    "format": "boolean",
-                    "exclusive": "True",
-                },
-            "manual_value": 
-                {
-                    "shortdsc": "To set a manual value to the hardware.",
-                    "longdsc": "actual_value will be overridden with this, when
-                                manual_override is true.",
-                    "default": 0.0,
-                    "type": "input",
-                    "format": "float",
-                    "exclusive": "True",
-                },
-            "hardware_type":
-                {
-                    "shortdsc": "The name from the hardwareplugin.",
-                    "longdsc": "The hardwareplugin is used to connect to the
-                                hardware.",
-                    "default": "none",
-                    "type": "simple",
-                    "format": "string",
-                    "exclusive": "gui",
-                },
-            "hardware_data": 
-                {
-                    "shortdsc": "The params for the hardwareplugin.",
-                    "longdsc": "This data is needed by the hardwareplugin. Here
-                                also should set the scaling options.",
-                    "default": "",
-                    "type": "simple",
-                    "format": "dictionary",
-                    "exclusive": "gui",
-                },
-        }
+    {
+        "name": "",
+        "shortdsc": "",
+        "longdsc": "",
+        "path": "~/openSPS/SOFTSPS/output.py"
+        "params": 
+            {
+                "safety_value": 
+                    {
+                        "shortdsc": 
+                            "This value will bring no threat, when it is
+                            writed to the hardware."
+                        "longdsc": 
+                            "This value will be set, if there is no
+                            programm, which want to set an other one.",
+                        "type": "input",
+                        "format": "float",
+                        "exclusive": "True",
+                    },
+                "hardware_type":
+                    {
+                        "shortdsc": "The name from the hardwareplugin.",
+                        "longdsc": "The hardwareplugin is used to connect to the
+                                    hardware.",
+                        "default": "none",
+                        "type": "simple",
+                        "format": "string",
+                        "exclusive": "gui",
+                    },
+                "hardware_data": 
+                    {
+                        "shortdsc": "The params for the hardwareplugin.",
+                        "longdsc": "This data is needed by the hardwareplugin. Here
+                                    also should set the scaling options.",
+                        "default": {},
+                        "type": "simple",
+                        "format": "dictionary",
+                        "exclusive": "gui",
+                    },
+            }
 
 
 class OutputDP:
@@ -110,51 +59,95 @@ class OutputDP:
     aditional informative data.
 
     Attributes:
-        _client (MongoClient): to conntect to the mongoDB
-        _outputs (MongoDB collection): the used mongoDB collection
-        _dp (dict): all information about the datapoint 
-        _physical_dp (dynamic): to connect to the hardware, depends on
-            hardware_type
+        _dp (dict): 
+            all information about the datapoint
+            {
+                actual_value (boolean or float): 
+                    The value, whitch will be write to the hardware.
+                state (string): 
+                    The return-state from the last operation.
+                manual_override (boolean): 
+                    True, if the actual_value will be overridden
+                    by manual_value.
+                manual_value (boolean or float):
+                    This value will be set to actual_value and write to the
+                    hardware, when manual_override is true.
+            }
+
+        _physical_dp (dynamic): 
+            to connect to the hardware, depends on hardware_type
     """
 
-    def __init__(self, dp_name):
-        """ Reads the data,  is associated with the given dp_name from
-        the mongo Database.
-
-        Creates two types of the datapoint as attributes, a dict ("_dp") and a
-        instance of the class given in "hardware_type" ("_physical_dp"). The
+    def __init__(self, safety_value, hardware_type, hardware_data):
+        """ Reads the data,  is associated with the given hardwaretype.
+        Creates two types of the datapoint as attributes, a dict, called _dp and a
+        instance of the class given in hardware_type, called _physical_dp. The
         hardware_type is a class, programmed against the interface
         "OpenSPSHardwarePlugin".
-
         Args:
-            dp_name (string): name of the datapoint in the database
+            safety_value (boolean or float): 
+                This value will be set, if there is no programm, which want to
+                set an other one. This shoult bring no threat, when writed to
+                the hardware.
+            
+            hardware_type (string): 
+                The name of the hardwareplugin, which will be used to connect
+                to the hardware.
 
-        Raise: 
-            InputError, when the given dp_name can't found.
+            hardware_data (dict):
+                The params, which the hardwareplugin needs to connect to the
+                hardware and write the right value.
         """
-        self._client = MongoClient()
-        self._outputs = self._client.ios.outputs
-        
-        self._dp = self._outputs.find_one({'name': dp_name})
-        if self._dp == None:
-            raise InputError("Can't find DP with the Name " + dp_name)
-        
+        self._dp = 
+            {
+                "safety_value": safety_value,
+                "actual_value": safety_value,
+                "manual_override": False,
+                "manual_value": safety_value,
+                "state": "don't know"
+            }
         self._physical_dp = getattr(
-                sys.modules[__name__],
-                self._dp['hardware_type'])(**self._dp['hardware_data'])   
+                sys.modules[__name__], hardware_type)(**hardware_data)   
+
+        write_physical_value()
     
-    def set_value(self, to_set_value): 
+    def set_actual_value(self, to_set_value): 
         """ Set the value in "_dp" to the given. 
+        Writes to the hardware, if manual_override is false.
         Args:
             to_set_value (dynamic): value which will be write. Depands on the
                 hardware-type.
         """
-        self._dp['actual_value'] = to_set_value
+        if manual_override == False: 
+            self._dp['actual_value'] = to_set_value
+            write_physical_value()
+    
+    def set_manual_value(self, to_set_value): 
+        """ Set the value in "_dp" to the given. 
+        Writes to the hardware, if manual_override is true.
+        Args:
+            to_set_value (dynamic): value which will be write. Depands on the
+                hardware-type.
+        """
+        self._dp['manual_value'] = to_set_value
+        if manual_override == True: 
+            self._dp['actual_value'] = self._dp['manual_value']
+            write_physical_value()
+    
+    def set_manual_override(self, to_set_value):
+        """ Sets the value of manual_override to true or False.
+        Writes to the hardware, if manual_override have changed. 
+        Args:
+            to_set_value (boolean): True, if the value from manual_value should
+                                    be override the actual_value.
+        """
+        if self._dp['manual_override'] != to_set_value:
+            self._dp['manual_override'] = to_set_value
+            set_actual_value(self._dp['safety_value'])
+            set_manual_value(self._dp['manual_value'])
     
     def write_physical_value(self):    
         """ Write the value, stord in "_dp" to hardware.
-        TODO: Writes only, if the values have bigger differents, than specified
-        in "cov" or have changed (strings, boolean).
         Sets "state" to "Hardware Error, when can't writing.
         """
         i = 0
@@ -166,22 +159,6 @@ class OutputDP:
         
         if i >= 3:
             self._dp['state'] = 'Hardware Error'
-        
         else:
             self._dp['state'] = 'good'
     
-    def update_to_db(self):
-        """ Write the value and state, stored in "_dp" to database.
-        TODO: Writes only, if the values have bigger differents, than specified
-        in "cov" or have changed (strings, boolean).
-        """
-        self._outputs.update(
-            {'_id': self._dp['_id']}, 
-            {'$set': 
-                {
-                    'state': self._dp['state'], 
-                    'actual_value': self._dp['actual_value']
-                }
-            })
-
-
