@@ -20,7 +20,7 @@ def new_analog_output():
                     {
                         "shortdsc": 
                             "This value will bring no threat, when it is " +
-                            "writed to the hardware.",
+                            "written to the hardware.",
                         "longdsc": 
                             "This value will be set, if there is no" +
                             "programm, which want to set an other one.",
