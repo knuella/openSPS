@@ -1,7 +1,9 @@
 #!/usr/bin/python
-# -*- coding: ascii -*-
 import pymongo
 from pymongo import MongoClient
+
+# def the functions
+# =================
 
 def add_my_dp_config():
     """ Testfunction.
@@ -10,6 +12,7 @@ def add_my_dp_config():
     """
     client = MongoClient()
     outputs = client.ios.outputs
+    inputs = client.ios.inputs
 
     for k in range(0, 2):
         for i in range(1, 5):
@@ -22,7 +25,7 @@ def add_my_dp_config():
                     "path": '~/openSPS/SOFTSPS/output.py',
                     "params":
                         {
-                            "safety_value": 0;
+                            "safety_value": 0,
                             "hardware_type": "none",
                             "hardware_data": 
                                 {
@@ -43,7 +46,7 @@ def add_my_dp_config():
                 "path": '~/openSPS/SOFTSPS/output.py',
                 "params":
                     {
-                        "safety_value": 0;
+                        "safety_value": 0,
                         "hardware_type": "none",
                         "hardware_data": 
                             {
@@ -71,7 +74,7 @@ def add_my_dp_config():
                     "path": '~/openSPS/SOFTSPS/output.py',
                     "params":
                         {
-                            "safety_value": 0;
+                            "safety_value": 0,
                             "hardware_type": "none",
                             "hardware_data": 
                                 {
@@ -92,6 +95,7 @@ def add_my_dp_config():
                 "path": '~/openSPS/SOFTSPS/output.py',
                 "params":
                     {
+                        "safety_value": 0,
                         "hardware_type": "none",
                         "hardware_data": 
                             {
@@ -119,22 +123,26 @@ def the_data_at_runtime():
             {
                 "value": 0,
                 "exclusive": "gui"
-            }
+            },
         "actual_value": 
             {
                 "value": 0,
                 "exclusive": False
-            }
+            },
         "manual_override": 
             {
                 "value": 0,
                 "exclusive": "gui"
-            }
+            },
         "manual_value": 
             {
                 "value": 0,
                 "exclusive": "gui"
-            }
-        "state": "don't know"
+            },
+        "state": "don't know",
     }
 
+
+# create the config in the database
+# =================================
+add_my_dp_config()
