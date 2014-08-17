@@ -1,6 +1,6 @@
 class pseudoplugin:
-    """ Use this plugin, if you don't have hardware on your controler and won't
-    to test your programm.
+    """ Use this plugin, if you don't have hardware on your controler and will
+    test your programm.
     """
     def __init__(self):
         pass

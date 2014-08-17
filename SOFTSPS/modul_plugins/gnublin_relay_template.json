@@ -1,0 +1,18 @@
+{
+		"Object_identifier":"",
+		"Object_Name":"",
+		"Object_Type": "binary output",
+		"Object_Functionskey":"",
+		"Object_Description":"",
+		"Device_Type": "",
+		"Device_Description": "",
+		"Device_Location":""
+    "safety_value": 0,
+    "active_text": "",
+    "inactive_text": "",
+		"Inverted":"",
+		"Modul_Type":"gnubliin_relay_io"
+		"Modul_Description": "Max load 230V, 5A; i2c-Connection",
+		"Modul_Location":""
+}
+
