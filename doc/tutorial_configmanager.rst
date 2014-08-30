@@ -63,6 +63,6 @@ Nachrichten verschicken / empfangen aus python
   test_context.request_value('cm', {'operation':'get', 'collection':'instances', 'target':{})
 
   # config löschen
-  test_context.write_value('cm', {'operation':'delete', 'collection':'instances', 'target':{'blakey':'blubval'})
+  test_context.write_value('cm', {'operation':'delete', 'collection':'instances', 'target':{'object_id':'1234345tesfvcjkdcfnhexr6387'})
 
 

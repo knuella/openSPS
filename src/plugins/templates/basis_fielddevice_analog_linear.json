@@ -1,20 +1,22 @@
-"Fielddevice":
 {
-	"Type": "",
-	"Category":"",
-	"Description": "",
-	"Safety_Value": 0,
-	"Scaling":
+	"Fielddevice":
 	{
-		"Type": "linear",
-		"Data":
+		"Type": "",
+		"Category":"",
+		"Description": "",
+		"Safety_Value": 0,
+		"Scaling":
 		{
-			"x1": 0,
-			"x2": 0,
-			"y1": 0,
-			"y2": 0
-		}
-	},
-  "Unit":"",
-	"Clamp-Address":""
+			"Type": "linear",
+			"Data":
+			{
+				"x1": 0,
+				"x2": 0,
+				"y1": 0,
+				"y2": 0
+			}
+		},
+		"Unit":"",
+		"Clamp-Address":""
+	}
 }
